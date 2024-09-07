@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\RepaymentSchedule\Model\Installment" table="installment">
+        <id name="id" type="installment_id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <!-- Many-to-One relationship with RepaymentSchedule -->
+        <many-to-one field="repaymentSchedule" target-entity="App\Domain\RepaymentSchedule\Model\RepaymentSchedule"
+                     inversed-by="installments">
+            <join-column name="repayment_schedule_id" referenced-column-name="id" nullable="false" on-delete="CASCADE"/>
+        </many-to-one>
+
+        <embedded name="total" class="App\Domain\RepaymentSchedule\Model\Money"/>
+        <embedded name="capital" class="App\Domain\RepaymentSchedule\Model\Money"/>
+        <embedded name="interest" class="App\Domain\RepaymentSchedule\Model\Money"/>
+
+        <field name="date" type="datetime_immutable" column="date"/>
+    </entity>
+</doctrine-mapping>
