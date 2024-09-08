@@ -12,7 +12,7 @@ use function is_a;
 
 abstract class BaseIdValueObject implements IdValueObjectInterface
 {
-    public final function __construct(
+    final public function __construct(
         protected UuidInterface $uuid,
     ) {
     }
@@ -32,11 +32,16 @@ abstract class BaseIdValueObject implements IdValueObjectInterface
     {
         return
             is_a(static::class, $other::class, true)
-            && $this->uuid->equals($other->uuid);
+            && $this->uuid->equals($other->getUuid());
     }
 
     public function __toString()
     {
         return $this->uuid->toString();
+    }
+
+    public function getUuid(): UuidInterface
+    {
+        return $this->uuid;
     }
 }

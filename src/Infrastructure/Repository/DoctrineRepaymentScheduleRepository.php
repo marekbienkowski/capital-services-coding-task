@@ -11,8 +11,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\Uuid;
 
-class DoctrineRepaymentScheduleRepository extends ServiceEntityRepository
-    implements RepaymentScheduleRepositoryInterface
+/** @extends ServiceEntityRepository<RepaymentSchedule> */
+class DoctrineRepaymentScheduleRepository extends ServiceEntityRepository implements
+    RepaymentScheduleRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -31,13 +32,38 @@ class DoctrineRepaymentScheduleRepository extends ServiceEntityRepository
 
     public function findByIdentity(RepaymentScheduleId $identity): ?RepaymentSchedule
     {
-        return $this->find(
+        /** @var ?RepaymentSchedule $entity */
+        $entity = $this->find(
             $identity->__toString()
         );
+
+        return $entity;
     }
 
-    public function getAll(): array
-    {
-        return $this->findAll();
+    /** @return RepaymentSchedule[] */
+    public function getFiltered(
+        int $limit,
+        string $sortBy,
+        bool $sortDescending = false,
+        bool $includeDeactivated = false,
+    ): array {
+        /** @var array<string, scalar> $criteria */
+        $criteria = [];
+
+        if (!$includeDeactivated) {
+            $criteria['isActive'] = true;
+        }
+
+        /** @var array<string, 'ASC'|'asc'|'desc'|'DESC'> $sorting */
+        $sorting = [$sortBy => $sortDescending ? 'DESC' : 'ASC'];
+
+        /** @var RepaymentSchedule[] $matchingEntities */
+        $matchingEntities = $this->findBy(
+            criteria: $criteria,
+            orderBy: $sorting,
+            limit: $limit,
+        );
+
+        return $matchingEntities;
     }
 }

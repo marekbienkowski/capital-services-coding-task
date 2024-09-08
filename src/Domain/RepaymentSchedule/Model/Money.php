@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Domain\RepaymentSchedule\Model;
 
 use App\Domain\Common\Enum\Currency;
+use App\Domain\RepaymentSchedule\Exception\InvalidCurrencyException;
 use InvalidArgumentException;
 use Stringable;
+use ValueError;
 
 use function intval;
+use function strtoupper;
 
 readonly class Money implements Stringable
 {
@@ -18,6 +21,18 @@ readonly class Money implements Stringable
         public int $value,
         public Currency $currency,
     ) {
+    }
+
+    public static function fromPrimitives(float $amount, string $currencySymbol): self
+    {
+        try {
+            return self::fromFloat(
+                amount: $amount,
+                currency: Currency::from(strtoupper($currencySymbol)),
+            );
+        } catch (ValueError $exception) { //Domain should talk using domain objects, not some implementation details
+            throw InvalidCurrencyException::fromCurrency($currencySymbol, $exception);
+        }
     }
 
     public static function fromFloat(float $amount, Currency $currency): self

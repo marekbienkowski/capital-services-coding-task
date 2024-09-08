@@ -8,8 +8,7 @@
         <id name="id" type="installment_id">
             <generator strategy="NONE"/>
         </id>
-
-        <!-- Many-to-One relationship with RepaymentSchedule -->
+        <field name="sequence" type="integer" column="sequence"/>
         <many-to-one field="repaymentSchedule" target-entity="App\Domain\RepaymentSchedule\Model\RepaymentSchedule"
                      inversed-by="installments">
             <join-column name="repayment_schedule_id" referenced-column-name="id" nullable="false" on-delete="CASCADE"/>

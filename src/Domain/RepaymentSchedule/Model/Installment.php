@@ -16,7 +16,28 @@ class Installment
         private Money $capital,
         private Money $interest,
         private DateTimeImmutable $date,
+        private int $sequence,
     ) {
+    }
+
+    public function getTotal(): Money
+    {
+        return $this->total;
+    }
+
+    public function getDate(): DateTimeImmutable
+    {
+        return $this->date;
+    }
+
+    public function getSequence(): int
+    {
+        return $this->sequence;
+    }
+
+    public function getRepaymentSchedule(): RepaymentSchedule
+    {
+        return $this->repaymentSchedule;
     }
 
     public function getId(): InstallmentId

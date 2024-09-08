@@ -10,7 +10,7 @@ use Throwable;
 
 use function sprintf;
 
-class InvalidAmountException extends DomainException
+class InvalidCreditAmountException extends DomainException
 {
     public static function forAmount(
         Money $amount,

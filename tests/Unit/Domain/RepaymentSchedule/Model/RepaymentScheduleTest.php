@@ -6,7 +6,7 @@ namespace App\Tests\Unit\Domain\RepaymentSchedule\Model;
 
 use App\Domain\Common\Enum\Currency;
 use App\Domain\RepaymentSchedule\Enum\ScheduleType;
-use App\Domain\RepaymentSchedule\Exception\InvalidAmountException;
+use App\Domain\RepaymentSchedule\Exception\InvalidCreditAmountException;
 use App\Domain\RepaymentSchedule\Exception\InvalidInstallmentCountException;
 use App\Domain\RepaymentSchedule\Model\InterestRate;
 use App\Domain\RepaymentSchedule\Model\Money;
@@ -71,7 +71,7 @@ class RepaymentScheduleTest extends TestCase
     public function scheduleWillNotAllowToBeCreatedWithInvalidAmount(
         float $amount,
     ): void {
-        $this->expectException(InvalidAmountException::class);
+        $this->expectException(InvalidCreditAmountException::class);
 
         $testedObject = new RepaymentSchedule(
             id: RepaymentScheduleId::next(),

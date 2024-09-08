@@ -14,5 +14,10 @@ interface RepaymentScheduleRepositoryInterface
     public function findByIdentity(RepaymentScheduleId $identity): ?RepaymentSchedule;
 
     /** @return RepaymentSchedule[] */
-    public function getAll(): array;
+    public function getFiltered(
+        int $limit,
+        string $sortBy,
+        bool $sortDescending = false,
+        bool $includeDeactivated = false,
+    ): array;
 }

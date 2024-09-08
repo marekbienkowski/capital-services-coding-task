@@ -9,7 +9,7 @@ use App\Domain\RepaymentSchedule\Model\RepaymentScheduleId;
 readonly class DeactivateRepaymentScheduleCommand
 {
     public function __construct(
-        public RepaymentScheduleId $repaymentScheduleId,
+        public RepaymentScheduleId $id,
     ) {
     }
 }

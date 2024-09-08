@@ -19,6 +19,7 @@ class InstallmentIdType extends GuidType
         return new InstallmentId($value);
     }
 
+    /** @param string $value */
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): string
     {
         return (string) $value;

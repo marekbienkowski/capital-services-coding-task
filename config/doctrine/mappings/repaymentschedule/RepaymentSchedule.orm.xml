@@ -31,7 +31,7 @@
                 <cascade-remove/>
             </cascade>
             <order-by>
-                <order-by-field name="date" direction="ASC"/>
+                <order-by-field name="sequence" direction="ASC"/>
             </order-by>
         </one-to-many>
     </entity>

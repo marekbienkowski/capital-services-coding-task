@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\RepaymentSchedule\Model;
 
 use App\Domain\RepaymentSchedule\Enum\ScheduleType;
-use App\Domain\RepaymentSchedule\Exception\InvalidAmountException;
+use App\Domain\RepaymentSchedule\Exception\InvalidCreditAmountException;
 use App\Domain\RepaymentSchedule\Exception\InvalidInstallmentCountException;
 use App\Domain\RepaymentSchedule\Exception\InvalidStateException;
 use DateTimeImmutable;
@@ -43,6 +43,21 @@ class RepaymentSchedule
 
         $this->calculateInstallments();
         $this->calculateTotalInterest();
+    }
+
+    public function getTotalInterestAmount(): Money
+    {
+        return $this->totalInterestAmount;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getInterestRate(): InterestRate
+    {
+        return $this->interestRate;
     }
 
     public function getId(): RepaymentScheduleId
@@ -122,7 +137,7 @@ class RepaymentSchedule
 
         $dateOfInstallment = $this->getDateOfFirstInstallment();
 
-        for ($i = 0; $i < $this->installmentCount; $i++) {
+        for ($i = 1; $i <= $this->installmentCount; $i++) {
             if ($i !== 0) {
                 $dateOfInstallment = $dateOfInstallment->modify('+1 month');
             }
@@ -134,6 +149,7 @@ class RepaymentSchedule
                     capital: $installmentCapital,
                     interest: $installmentInterest,
                     date: $dateOfInstallment,
+                    sequence: $i
                 )
             );
         }
@@ -198,7 +214,7 @@ class RepaymentSchedule
             return;
         }
 
-        throw InvalidAmountException::forAmount(
+        throw InvalidCreditAmountException::forAmount(
             $this->totalAmount,
             new Money($min, $this->totalAmount->currency),
             new Money($max, $this->totalAmount->currency),

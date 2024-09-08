@@ -28,7 +28,7 @@ class RepaymentScheduleFactory implements RepaymentScheduleFactoryInterface
         );
     }
 
-    //For simplification of example, let's assume we'll have single interest rate
+    //For simplification of example, let's assume we'll have only one possible interest rate
     private function getInterestRate(): InterestRate
     {
         return new InterestRate(5);
