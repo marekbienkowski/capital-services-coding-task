@@ -15,6 +15,9 @@ use App\Domain\RepaymentSchedule\Model\RepaymentScheduleId;
 use App\Infrastructure\API\Request\CreateRepaymentScheduleRequest;
 use App\Infrastructure\API\Request\GetLatestRelevantSchedulesRequest;
 use App\Infrastructure\API\Response\RepaymentScheduleResponse;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,9 +26,7 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 
-//REST API is usually only one of the access points to modern application. It is then an Infrastructure concern, that
-// interacts with Application layer orchestrating Domain usage. I decided to not separate presentation Layer, as for
-// different access points, presentation may differ.
+#[OA\Tag(name: 'RepaymentScheduleManagement')]
 #[Route('/api/repayment_schedule')]
 class RepaymentScheduleController extends AbstractController
 {
@@ -34,6 +35,31 @@ class RepaymentScheduleController extends AbstractController
     ) {
     }
 
+    #[OA\Get(
+        path: '/api/repayment_schedule/{id}',
+        summary: 'Get a repayment schedule by ID',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                description: 'Repayment Schedule ID',
+                in: 'path',
+                required: true,
+                schema: new OA\Schema(type: 'string', format: 'uuid')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Returns a repayment schedule',
+                content: new OA\JsonContent(ref: new Model(type: RepaymentScheduleResponse::class))
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Repayment schedule not found'
+            ),
+        ]
+    )]
+    #[Security(name: 'Bearer')]
     #[Route(
         '/{id}',
         name: 'get_repayment_schedule',
@@ -53,6 +79,30 @@ class RepaymentScheduleController extends AbstractController
         );
     }
 
+    #[OA\Get(
+        path: '/api/repayment_schedule/latest-relevant',
+        summary: 'Get latest relevant repayment schedules',
+        parameters: [
+            new OA\Parameter(
+                name: 'excludeDeactivated',
+                description: 'Whether to exclude deactivated schedules',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'boolean')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Returns a list of repayment schedules',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(ref: new Model(type: RepaymentScheduleResponse::class))
+                )
+            ),
+        ]
+    )]
+    #[Security(name: 'Bearer')]
     #[Route('/latest-relevant', name: 'get_relevant_repayment_schedules', methods: [Request::METHOD_GET])]
     public function getLatestRelevantSchedules(
         #[MapQueryString] GetLatestRelevantSchedulesRequest $requestDto,
@@ -68,6 +118,26 @@ class RepaymentScheduleController extends AbstractController
         );
     }
 
+    #[OA\Post(
+        path: '/api/repayment_schedule',
+        summary: 'Create a new repayment schedule',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(ref: new Model(type: CreateRepaymentScheduleRequest::class))
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Repayment schedule created',
+                content: new OA\JsonContent(ref: new Model(type: RepaymentScheduleResponse::class))
+            ),
+            new OA\Response(
+                response: 400,
+                description: 'Invalid input'
+            ),
+        ]
+    )]
+    #[Security(name: 'Bearer')]
     #[Route('/', name: 'create_payment_schedule', methods: [Request::METHOD_POST])]
     public function create(
         #[MapRequestPayload] CreateRepaymentScheduleRequest $requestDto,
@@ -86,6 +156,30 @@ class RepaymentScheduleController extends AbstractController
         );
     }
 
+    #[OA\Delete(
+        path: '/api/repayment_schedule/{id}',
+        summary: 'Deactivate a repayment schedule',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                description: 'Repayment Schedule ID',
+                in: 'path',
+                required: true,
+                schema: new OA\Schema(type: 'string', format: 'uuid')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 204,
+                description: 'Repayment schedule deactivated'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Repayment schedule not found'
+            ),
+        ]
+    )]
+    #[Security(name: 'Bearer')]
     #[Route('/{id}', name: 'deactivate_repayment_schedule', methods: [Request::METHOD_DELETE])]
     public function deactivate(string $id): Response
     {
