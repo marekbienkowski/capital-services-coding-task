@@ -10,5 +10,6 @@ class InvalidInterestRateException extends DomainException
 {
     public static function forPercentagePoints(int $percentagePoints): self
     {
+        return new self('%d is not valid loan percentage. Use one from the range <0, 100>');
     }
 }

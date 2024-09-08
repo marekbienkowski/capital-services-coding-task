@@ -15,6 +15,9 @@ services:
       - .:/var/www/symfony
     expose:
       - "9000"
+      - "9003"
+    extra_hosts:
+      - "host.docker.internal:192.168.50.125"
 
   nginx:
     image: nginx:latest

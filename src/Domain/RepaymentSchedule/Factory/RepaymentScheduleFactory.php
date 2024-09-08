@@ -6,7 +6,6 @@ namespace App\Domain\RepaymentSchedule\Factory;
 
 use App\Domain\RepaymentSchedule\Enum\ScheduleType;
 use App\Domain\RepaymentSchedule\Interface\RepaymentScheduleFactoryInterface;
-use App\Domain\RepaymentSchedule\Interface\RepaymentScheduleRepositoryInterface;
 use App\Domain\RepaymentSchedule\Model\InterestRate;
 use App\Domain\RepaymentSchedule\Model\Money;
 use App\Domain\RepaymentSchedule\Model\RepaymentSchedule;
@@ -14,11 +13,6 @@ use App\Domain\RepaymentSchedule\Model\RepaymentScheduleId;
 
 class RepaymentScheduleFactory implements RepaymentScheduleFactoryInterface
 {
-    public function __construct(
-        private readonly RepaymentScheduleRepositoryInterface $repaymentScheduleRepository,
-    ) {
-    }
-
     public function create(
         ScheduleType $scheduleType,
         Money $amount,
@@ -34,7 +28,7 @@ class RepaymentScheduleFactory implements RepaymentScheduleFactoryInterface
         );
     }
 
-    //
+    //For simplification of example, let's assume we'll have single interest rate
     private function getInterestRate(): InterestRate
     {
         return new InterestRate(5);

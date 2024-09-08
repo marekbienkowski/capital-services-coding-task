@@ -12,7 +12,7 @@ use function is_a;
 
 abstract class BaseIdValueObject implements IdValueObjectInterface
 {
-    public function __construct(
+    public final function __construct(
         protected UuidInterface $uuid,
     ) {
     }
