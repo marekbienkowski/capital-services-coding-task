@@ -31,13 +31,6 @@ COPY . .
 # Install Symfony dependencies
 RUN composer install --prefer-dist --no-scripts --no-interaction
 
-# Configure Xdebug
-RUN echo "zend_extension=xdebug.so" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-
 # Expose port 9000 for PHP-FPM and 9003 for Xdebug
 EXPOSE 9000 9003
 
