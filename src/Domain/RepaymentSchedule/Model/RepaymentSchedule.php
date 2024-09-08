@@ -149,7 +149,8 @@ class RepaymentSchedule
                     capital: $installmentCapital,
                     interest: $installmentInterest,
                     date: $dateOfInstallment,
-                    sequence: $i
+                    sequence: $i,
+                    repaymentSchedule: $this
                 )
             );
         }

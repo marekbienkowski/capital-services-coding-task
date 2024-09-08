@@ -8,8 +8,6 @@ use DateTimeImmutable;
 
 class Installment
 {
-    private RepaymentSchedule $repaymentSchedule;
-
     public function __construct(
         private InstallmentId $id,
         private Money $total,
@@ -17,6 +15,7 @@ class Installment
         private Money $interest,
         private DateTimeImmutable $date,
         private int $sequence,
+        private RepaymentSchedule $repaymentSchedule,
     ) {
     }
 

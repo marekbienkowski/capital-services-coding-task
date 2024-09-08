@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Common\Model;
 
 use App\Domain\Common\Interface\IdValueObjectInterface;
+use App\Domain\RepaymentSchedule\Exception\InvalidIdException;
+use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
@@ -19,7 +21,11 @@ abstract class BaseIdValueObject implements IdValueObjectInterface
 
     public static function fromString(string $value): static
     {
-        return new static(Uuid::fromString($value));
+        try {
+            return new static(Uuid::fromString($value));
+        } catch (InvalidUuidStringException $exception) {
+            throw InvalidIdException::forValue($value, static::class, $exception);
+        }
     }
 
     //Generating next identity may be also responsibility of a repository, yet I want simplicity for this task

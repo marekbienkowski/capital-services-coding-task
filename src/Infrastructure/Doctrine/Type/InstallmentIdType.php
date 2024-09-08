@@ -7,16 +7,15 @@ namespace App\Infrastructure\Doctrine\Type;
 use App\Domain\RepaymentSchedule\Model\InstallmentId;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\GuidType;
-use Ramsey\Uuid\UuidInterface;
 
 class InstallmentIdType extends GuidType
 {
-    const INSTALLMENT_ID = 'installment_id';
+    const string INSTALLMENT_ID = 'installment_id';
 
-    /** @param UuidInterface $value */
+    /** @param string $value */
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): InstallmentId
     {
-        return new InstallmentId($value);
+        return InstallmentId::fromString($value);
     }
 
     /** @param string $value */

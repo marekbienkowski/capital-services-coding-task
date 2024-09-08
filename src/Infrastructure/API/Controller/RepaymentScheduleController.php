@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 //REST API is usually only one of the access points to modern application. It is then an Infrastructure concern, that
 // interacts with Application layer orchestrating Domain usage. I decided to not separate presentation Layer, as for
 // different access points, presentation may differ.
-#[Route('/api/payment_schedule')]
+#[Route('/api/repayment_schedule')]
 class RepaymentScheduleController extends AbstractController
 {
     public function __construct(
@@ -34,8 +34,13 @@ class RepaymentScheduleController extends AbstractController
     ) {
     }
 
-    #[Route('/{id}', name: 'get_repayment_schedule', methods: [Request::METHOD_GET])]
-    public function getSingle(string $id): Response
+    #[Route(
+        '/{id}',
+        name: 'get_repayment_schedule',
+        requirements: ['id' => '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'],
+        methods: [Request::METHOD_GET]
+    )]
+    public function getSingle(string $id): JsonResponse
     {
         $schedule = $this->repaymentScheduleService->getRepaymentSchedule(
             new GetRepaymentScheduleQuery(
@@ -48,7 +53,7 @@ class RepaymentScheduleController extends AbstractController
         );
     }
 
-    #[Route('/latest-relevant', name: 'get_repayment_schedule', methods: [Request::METHOD_GET])]
+    #[Route('/latest-relevant', name: 'get_relevant_repayment_schedules', methods: [Request::METHOD_GET])]
     public function getLatestRelevantSchedules(
         #[MapQueryString] GetLatestRelevantSchedulesRequest $requestDto,
     ): JsonResponse {
