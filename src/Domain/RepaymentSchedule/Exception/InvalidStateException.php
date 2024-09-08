@@ -8,5 +8,4 @@ use App\Domain\Common\Exception\DomainException;
 
 class InvalidStateException extends DomainException
 {
-
 }

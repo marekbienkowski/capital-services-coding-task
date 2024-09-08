@@ -10,7 +10,7 @@ use Doctrine\DBAL\Types\GuidType;
 
 class InstallmentIdType extends GuidType
 {
-    const string INSTALLMENT_ID = 'installment_id';
+    private const string INSTALLMENT_ID = 'installment_id';
 
     /** @param string $value */
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): InstallmentId

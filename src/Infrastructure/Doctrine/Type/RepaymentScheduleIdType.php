@@ -10,7 +10,7 @@ use Doctrine\DBAL\Types\GuidType;
 
 class RepaymentScheduleIdType extends GuidType
 {
-    const string REPAYMENT_SCHEDULE_ID = 'repayment_schedule_id';
+    private const string REPAYMENT_SCHEDULE_ID = 'repayment_schedule_id';
 
     /** @param string $value */
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): RepaymentScheduleId
