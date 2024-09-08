@@ -1,0 +1,219 @@
+{
+	"info": {
+		"_postman_id": "be09faa4-da86-4d2a-98f4-e00c85abc906",
+		"name": "REST API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5727061"
+	},
+	"item": [
+		{
+			"name": "Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 12000,\n    \"currency\": \"USD\",\n    \"installmentCount\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1/api/repayment_schedule/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"api",
+						"repayment_schedule",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get single",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 10000,\n    \"currency\": \"USD\",\n    \"installmentCount\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1/api/repayment_schedule/:id",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"api",
+						"repayment_schedule",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "d8a8f3af-4a3b-4a8b-98be-0cf2b8e108ee"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get relevant",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 10000,\n    \"currency\": \"USD\",\n    \"installmentCount\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1/api/repayment_schedule/latest-relevant?excludeDeactivated=false",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"api",
+						"repayment_schedule",
+						"latest-relevant"
+					],
+					"query": [
+						{
+							"key": "excludeDeactivated",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deactivate",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 10000,\n    \"currency\": \"USD\",\n    \"installmentCount\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1/api/repayment_schedule/:id",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"path": [
+						"api",
+						"repayment_schedule",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "f2a35727-1207-4e28-8f63-e277260333c6"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"// Define the URL to fetch the token",
+					"const authUrl = 'http://127.0.0.1/auth/token';",
+					"",
+					"// Make a request to get the token",
+					"pm.sendRequest({",
+					"    url: authUrl,",
+					"    method: 'GET',",
+					"    header: {",
+					"        'Content-Type': 'application/json',",
+					"    }",
+					"}, function (err, res) {",
+					"    if (err) {",
+					"        console.error('Error fetching token:', err);",
+					"    } else {",
+					"        // Parse the token from the response",
+					"        const jsonResponse = res.json();",
+					"        const token = jsonResponse.token;",
+					"",
+					"        // Set the token as a variable in Postman",
+					"        pm.environment.set('authToken', token);",
+					"",
+					"        // Log the token for debugging",
+					"        console.log('Retrieved token:', token);",
+					"    }",
+					"});",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
