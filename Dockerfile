@@ -23,14 +23,17 @@ COPY . .
 # Install Symfony dependencies
 RUN composer install --prefer-dist --no-scripts --no-interaction
 
-# Create the directory for JWT keys and generate keys
-RUN mkdir -p config/jwt && \
-    openssl genpkey -algorithm RSA -out config/jwt/private.pem -pkeyopt rsa_keygen_bits:4096 && \
-    openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem && \
-    chmod 600 config/jwt/private.pem && chmod 644 config/jwt/public.pem
-
 # Set permissions for Symfony folders
-RUN chown -R www-data:www-data var/cache var/log
+RUN chown -R www-data:www-data var/cache var/log config
+
+# Create the directory for JWT keys and generate keys
+#RUN mkdir -p /var/www/symfony/config/jwt && \
+#    openssl genpkey -algorithm RSA -out /var/www/symfony/config/jwt/private.pem -pkeyopt rsa_keygen_bits:4096 && \
+#    openssl rsa -pubout -in /var/www/symfony/config/jwt/private.pem -out /var/www/symfony/config/jwt/public.pem && \
+#    chmod 600 /var/www/symfony/config/jwt/private.pem && chmod 644 /var/www/symfony/config/jwt/public.pem
+
+# Set the entrypoint to the script
+ENTRYPOINT ["/var/www/symfony/entrypoint.sh"]
 
 # Expose port 9000 for PHP-FPM
 EXPOSE 9000
